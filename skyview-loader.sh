@@ -10,7 +10,7 @@ mkdir -p $TMP_DIR
 function backup_usb_drive() {
     echo ""
 	echo "Backing up USB Drive to local folder (dynon: "
-    rsync -Pavn /Volumes/SKYVIEWPFD/* dynon/
+    rsync -Pavn $PRIMARY_FD_USB/* dynon/
 	echo ""
 }
 
