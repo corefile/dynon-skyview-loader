@@ -1,4 +1,6 @@
 #!/bin/bash
+PRIMARY_FD_USB=/Volumes/SKYVIEWPFD
+SECONDARY_FD_USB=/Volumes/SKYVIEWSFD
 OUTPUT_DIR=./dynon
 CHARTDATA_DIR=$OUTPUT_DIR/ChartData
 TMP_DIR=./tmp
@@ -8,7 +10,7 @@ mkdir -p $TMP_DIR
 function backup_usb_drive() {
     echo ""
 	echo "Backing up USB Drive to local folder (dynon: "
-    rsync -r 
+    rsync -Pavn /Volumes/SKYVIEWPFD/* dynon/
 	echo ""
 }
 
