@@ -12,16 +12,35 @@ function backup_usb_drive() {
 	echo ""
 }
 
+function sectional_update() {
+    echo ""
+	echo "Backing up USB Drive to local folder (dynon: "
+    rsync -r 
+	echo ""
+}
 
+function all_charts_update() {
+    echo ""
+	echo "Backing up USB Drive to local folder (dynon: "
+    rsync -r 
+	echo ""
+}
 
+function dynon_software_update() {
+    echo ""
+	echo "Backing up USB Drive to local folder (dynon: "
+    rsync -r 
+	echo ""
+}
 
-
-
-
-
-
-
-
+function all_above() {
+    echo ""
+	echo "Backup, update sectional, IFR charts, Dynon Software "
+    backup_usb_drive
+    sectional_update
+    all_charts_update
+    dynon_software_update
+}
 
 ##
 # Color  Variables
@@ -29,35 +48,37 @@ function backup_usb_drive() {
 green='\x1B[32m'
 blue='\x1B[34m'
 clear='\x1B[0m'
-
+bold=$(tput bold)
 ##
 # Color Functions
 ##
 
 ColorGreen(){
-	echo -ne $green$1$clear
+	echo $green$1$clear
 }
 ColorBlue(){
-	echo -ne $blue$1$clear
+	echo $blue$1$clear
 }
-
+BoldTitle (){
+	echo $bold$1$clear
+}
 menu(){
-echo -ne "
-Dynon Skyview 
+echo "
+$(BoldTitle 'Dynon Skyview') 
 $(ColorGreen '1)') Backup USB Drive
 $(ColorGreen '2)') Sectionals Update
 $(ColorGreen '3)') All Charts Update
 $(ColorGreen '4)') Dynon Software Update
-$(ColorGreen '5)') Check All
+$(ColorGreen '5)') All Above
 $(ColorGreen '0)') Exit
 $(ColorBlue 'Choose an option:') "
         read a
         case $a in
 	        1) backup_usb_drive ; menu ;;
-	        2) cpu_check ; menu ;;
-	        3) tcp_check ; menu ;;
-	        4) kernel_check ; menu ;;
-	        5) all_checks ; menu ;;
+	        2) sectional_update ; menu ;;
+	        3) all_charts_update ; menu ;;
+	        4) dynon_software_update ; menu ;;
+	        5) all_above ; menu ;;
 		0) exit 0 ;;
 		*) echo -e $red"Wrong option."$clear; WrongCommand;;
         esac
