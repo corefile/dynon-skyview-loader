@@ -7,7 +7,7 @@ TMP_DIR=./tmp
 mkdir -p $TMP_DIR
 
 
-function backup_usb_drive() {
+function backup_primary_usb_drive() {
     echo ""
 	echo "Backing up USB Drive to local folder (dynon: "
     rsync -Pavn $PRIMARY_FD_USB/* dynon/
@@ -90,7 +90,7 @@ $(ColorGreen '0)') Exit
 $(ColorBlue 'Choose an option:') "
         read a
         case $a in
-	        1) backup_usb_drive ; menu ;;
+	        1) backup_primary_usb_drive ; menu ;;
 	        2) sectional_update ; menu ;;
 	        3) all_charts_update ; menu ;;
 		4) dynon_aviation_obstacles_db ; menu ;;
