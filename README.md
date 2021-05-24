@@ -1,6 +1,6 @@
 # Dynon Skyview Loader
 
-Currently supports MacOS & Linux
+Currently supports MacOS - would not be hard to change a few things to make it work on Linux
 
 1. Visit the [Dynon SkyView ChartData page](https://www.seattleavionics.com/ChartData/Default.aspx?TargetDevice=Dynon).
 1. Login with your Seattle Avionics Credentials.
