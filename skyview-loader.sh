@@ -9,26 +9,46 @@ mkdir -p $TMP_DIR
 
 function backup_primary_usb_drive() {
     echo ""
-	echo "Backing up USB Drive to local folder (dynon: "
+	echo "Backing up USB Drive to local folder (dynon): "
     rsync -Pavn $PRIMARY_FD_USB/* dynon/
 	echo ""
 }
 
-function sectional_update() {
-  echo "Enter this month's prefix number (4 digits): "
+
+function 56_day() {
+  echo "Enter this month's prefix number 28 day cycle (4 digits): "
 read PREFIX
 
 echo "Enter this month's password: "
 read PASSWORD
 
+wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.Plates1024.PNG.zip
+wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.Plates.GEO.zip
+wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.FG1024.PNG.zip
+wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.FG.GEO.zip
+
+}
+
+
+function 56_day() {
+  echo "Enter this month's prefix number 56 day cycle (4 digits): "
+read PREFIX
+
+echo "Enter this month's password: "
+read PASSWORD
+
+wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.ScannedCharts.sqlite.zip
+wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.LO.MultiDiskImg.zip
+wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.HI.MultiDiskImg.zip
 wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.SEC.MultiDiskImg.zip
 }
 
+
 function all_charts_update() {
     echo ""
-	echo "Backing up USB Drive to local folder (dynon: "
-    rsync -r 
-	echo ""
+	echo "All Charts update - 28 and 56 day cycles "
+    56_day
+    28_day
 }
 
 function dynon_aviation_obstacles_db() {
@@ -81,21 +101,23 @@ menu(){
 echo "
 $(BoldTitle 'Dynon Skyview') 
 $(ColorGreen '1)') Backup USB Drive
-$(ColorGreen '2)') Sectionals Update
-$(ColorGreen '3)') All Charts Update
-$(ColorGreen '4)') Dynon Aviation & Obstacles DB
-$(ColorGreen '5)') Skyview Software Update
-$(ColorGreen '6)') All Above
+$(ColorGreen '2)') IFR Plates, Airport & Fligh Guide Diag, SA Airport Geo (28 day)
+$(ColorGreen '3)') VFR Sec, IFR Low/High Charts, Scanned Charts DB (56 day)
+$(ColorGreen '4)') All Charts Update
+$(ColorGreen '5)') Dynon Aviation & Obstacles DB
+$(ColorGreen '6)') Skyview Software Update
+$(ColorGreen '7)') All Above
 $(ColorGreen '0)') Exit
 $(ColorBlue 'Choose an option:') "
         read a
         case $a in
 	        1) backup_primary_usb_drive ; menu ;;
-	        2) sectional_update ; menu ;;
-	        3) all_charts_update ; menu ;;
-		4) dynon_aviation_obstacles_db ; menu ;;
-	        5) skyview_software_update ; menu ;;
-	        6) all_above ; menu ;;
+	        2) 28_day ; menu ;;
+		3) 56_day ; menu ;;
+	        4) all_charts_update ; menu ;;
+		5) dynon_aviation_obstacles_db ; menu ;;
+	        6) skyview_software_update ; menu ;;
+	        7) all_above ; menu ;;
 		0) exit 0 ;;
 		*) echo -e $red"Wrong option."$clear; WrongCommand;;
         esac
