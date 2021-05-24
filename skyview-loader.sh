@@ -83,6 +83,27 @@ all_above() {
 ## USB Drive Prep ## 
 ####################
 
+echo "Removing old data"
+### removing this line to keep engine logs ###
+## rm -rf $OUTPUT_DIR
+###
+mkdir -p $OUTPUT_DIR
+mkdir -p $CHARTDATA_DIR
+
+echo "Extracting databases"
+unzip -q -o -P $PASSWORD -d ./$CHARTDATA_DIR/Plates $TMP_DIR/$PREFIX.Plates.GEO.zip
+unzip -q -o -P $PASSWORD -d ./$CHARTDATA_DIR/Plates/US $TMP_DIR/$PREFIX.Plates1024.PNG.zip
+unzip -q -o -P $PASSWORD -d ./$CHARTDATA_DIR/FG $TMP_DIR/$PREFIX.FG.GEO.zip
+unzip -q -o -P $PASSWORD -d ./$CHARTDATA_DIR/FG/US $TMP_DIR/$PREFIX.FG1024.PNG.zip
+unzip -q -o              -d ./$CHARTDATA_DIR $TMP_DIR/$PREFIX.ScannedCharts.sqlite.zip
+unzip -q -o -P $PASSWORD -d ./$CHARTDATA_DIR $TMP_DIR/$PREFIX.LO.MultiDiskImg.zip
+unzip -q -o -P $PASSWORD -d ./$CHARTDATA_DIR $TMP_DIR/$PREFIX.HI.MultiDiskImg.zip
+unzip -q -o -P $PASSWORD -d ./$CHARTDATA_DIR $TMP_DIR/$PREFIX.SEC.MultiDiskImg.zip
+
+echo "Staging Skyview updates"
+cp $TMP_DIR/$aviation_obstacles_filename $OUTPUT_DIR/
+cp $TMP_DIR/$software_ten_filename $OUTPUT_DIR/
+cp $TMP_DIR/$software_seven_filename $OUTPUT_DIR/
 
 
 #################
