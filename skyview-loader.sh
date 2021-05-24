@@ -16,7 +16,7 @@ function backup_primary_usb_drive() {
 }
 
 
-function 56_day() {
+function 28_day() {
      echo "Enter this month's prefix number 28 day cycle (4 digits): "
        read PREFIX
      echo "Enter this month's password: "
