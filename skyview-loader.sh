@@ -83,6 +83,8 @@ all_above() {
 ## USB Drive Prep ## 
 ####################
 
+## need to fix this section for rsync vs original disk image output ##
+
 echo "Removing old data"
 ### removing this line to keep engine logs ###
 ## rm -rf $OUTPUT_DIR
