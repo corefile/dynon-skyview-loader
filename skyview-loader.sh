@@ -7,16 +7,19 @@ CHARTDATA_DIR=$OUTPUT_DIR/ChartData
 TMP_DIR=./tmp
 mkdir -p $TMP_DIR
 
+####################
+## MENU FUNCTIONS ## 
+####################
 
-function backup_primary_usb_drive() {
+backup_primary_usb_drive() {
      echo ""
-	echo "Backing up USB Drive to local folder (dynon): "
+  echo "Backing up USB Drive to local folder (dynon): "
      rsync -Pavn $PRIMARY_FD_USB/* $OUTPUT_DIR/PFD/
      echo ""
 }
 
 
-function 28_day() {
+twentyeight_day() {
      echo "Enter this month's prefix number 28 day cycle (4 digits): "
        read PREFIX
      echo "Enter this month's password: "
@@ -25,32 +28,30 @@ wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFI
 wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.Plates.GEO.zip
 wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.FG1024.PNG.zip
 wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.FG.GEO.zip
-
 }
 
 
-function 56_day() {
+fiftysix_day() {
      echo "Enter this month's prefix number 56 day cycle (4 digits): "
-       read PREFIX
+       read -r PREFIX2
      echo "Enter this month's password: "
-       read PASSWORD
-
-wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.ScannedCharts.sqlite.zip
-wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.LO.MultiDiskImg.zip
-wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.HI.MultiDiskImg.zip
-wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.SEC.MultiDiskImg.zip
+       read -r PASSWORD2
+wget -P "$TMP_DIR" --no-clobber http://data.seattleavionics.com/OEM/Generic/"$PREFIX2"/"$PREFIX2".ScannedCharts.sqlite.zip
+wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/"$PREFIX2"/"$PREFIX2".LO.MultiDiskImg.zip
+wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/"$PREFIX2"/"$PREFIX2".HI.MultiDiskImg.zip
+wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/"$PREFIX2"/"$PREFIX2".SEC.MultiDiskImg.zip 
 }
 
 
-function all_charts_update() {
+all_charts_update() {
     echo ""
-	echo "All Charts update (28 and 56 day cycles) "
-    56_day
-    28_day
+  echo "All Charts update (28 and 56 day cycles) "
+    twentyeight_day
+    fiftysix_day
 }
 
 
-function dynon_aviation_obstacles_db() {
+dynon_aviation_obstacles_db() {
      echo "Downloading Dynon Aviation and Obstacles Databases..."
        software_ten_path=$(curl -s https://www.dynoncertified.com/software-updates-single.php | grep -m 1 HDX1100 | sed -n 's/^.*href="\(.*.duc\)".*$/\1/p')
        software_ten_filename=$(echo $software_ten_path | sed -n 's/^.*\/\(.*.duc\)$/\1/p')
@@ -59,7 +60,7 @@ function dynon_aviation_obstacles_db() {
 }
 
 
-function skyview_software_update() {
+skyview_software_update() {
      echo "Downloading latest Skyview software updates..."
        software_ten_path=$(curl -s https://www.dynoncertified.com/software-updates-single.php | grep -m 1 HDX1100 | sed -n 's/^.*href="\(.*.duc\)".*$/\1/p')
        software_ten_filename=$(echo $software_ten_path | sed -n 's/^.*\/\(.*.duc\)$/\1/p')
@@ -68,9 +69,9 @@ function skyview_software_update() {
 }
 
 
-function all_above() {
+all_above() {
     echo ""
-	echo "Backup, update sectional, IFR charts, Dynon Software "
+  echo "Backup, update sectional, IFR charts, Dynon Software "
     backup_usb_drive
     all_charts_update
     dynon_aviation_obstacles_db
@@ -78,7 +79,9 @@ function all_above() {
 }
 
 
-
+####################
+## USB Drive Prep ## 
+####################
 
 
 
@@ -90,23 +93,24 @@ function all_above() {
 
 green='\x1B[32m'
 blue='\x1B[34m'
-clear='\x1B[0m'
+clear='\x1B[0m'  
 bold=$(tput bold)
 
 ## Color Functions ##
 
 ColorGreen(){
-	echo $green$1$clear
+  echo $green$1$clear
 }
 ColorBlue(){
-	echo $blue$1$clear
+  echo $blue$1$clear
 }
 BoldTitle (){
-	echo $bold$1$clear
+  echo $bold$1$clear
 }
+
+
 menu(){
-echo "
-$(BoldTitle '                                                                      
+cat << "EOF"
 88888888ba,  8b        d8  888b      88    ,ad8888ba,    888b      88  
 88      `"8b  Y8,    ,8P   8888b     88   d8"'    `"8b   8888b     88  
 88        `8b  Y8,  ,8P    88 `8b    88  d8'        `8b  88 `8b    88  
@@ -114,8 +118,9 @@ $(BoldTitle '
 88         88    `88'      88   `8b  88  88          88  88   `8b  88  
 88         8P     88       88    `8b 88  Y8,        ,8P  88    `8b 88  
 88      .a8P      88       88     `8888   Y8a.    .a8P   88     `8888  
-88888888Y"'       88       88      `888    `"Y8888Y"'    88      `888  
-') 
+88888888Y"'       88       88      `888    `"Y8888Y"'    88      `888 
+EOF
+echo "
 $(ColorGreen '1)') Backup USB Drive
 $(ColorGreen '2)') IFR Plates, Airport & Fligh Guide Diag, SA Airport Geo (28 day)
 $(ColorGreen '3)') VFR Sec, IFR Low/High Charts, Scanned Charts DB (56 day)
@@ -127,15 +132,15 @@ $(ColorGreen '0)') Exit
 $(ColorBlue 'Choose an option:') "
         read a
         case $a in
-	        1) backup_primary_usb_drive ; menu ;;
-	        2) 28_day ; menu ;;
-		3) 56_day ; menu ;;
-	        4) all_charts_update ; menu ;;
-		5) dynon_aviation_obstacles_db ; menu ;;
-	        6) skyview_software_update ; menu ;;
-	        7) all_above ; menu ;;
-		0) exit 0 ;;
-		*) echo -e $red"Wrong option."$clear; WrongCommand;;
+          1) backup_primary_usb_drive ; menu ;;
+          2) twentyeight_day ; menu ;;
+          3) fiftysix_day ; menu ;;
+          4) all_charts_update ; menu ;;
+          5) dynon_aviation_obstacles_db ; menu ;;
+          6) skyview_software_update ; menu ;;
+          7) all_above ; menu ;;
+          0) exit 0 ;;
+          *) echo -e $red"Wrong option."$clear; WrongCommand;;
         esac
 }
 
