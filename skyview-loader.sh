@@ -1,4 +1,5 @@
 #!/bin/bash
+## Need to figure out how to use 'diskutil list external' to auto populate usb drive volume names ##
 PRIMARY_FD_USB=/Volumes/SKYVIEWPFD
 SECONDARY_FD_USB=/Volumes/SKYVIEWSFD
 OUTPUT_DIR=./dynon
@@ -8,20 +9,18 @@ mkdir -p $TMP_DIR
 
 
 function backup_primary_usb_drive() {
-    echo ""
+     echo ""
 	echo "Backing up USB Drive to local folder (dynon): "
-    rsync -Pavn $PRIMARY_FD_USB/* dynon/
-	echo ""
+     rsync -Pavn $PRIMARY_FD_USB/* $OUTPUT_DIR/PFD/
+     echo ""
 }
 
 
 function 56_day() {
-  echo "Enter this month's prefix number 28 day cycle (4 digits): "
-read PREFIX
-
-echo "Enter this month's password: "
-read PASSWORD
-
+     echo "Enter this month's prefix number 28 day cycle (4 digits): "
+       read PREFIX
+     echo "Enter this month's password: "
+       read PASSWORD
 wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.Plates1024.PNG.zip
 wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.Plates.GEO.zip
 wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.FG1024.PNG.zip
@@ -31,11 +30,10 @@ wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFI
 
 
 function 56_day() {
-  echo "Enter this month's prefix number 56 day cycle (4 digits): "
-read PREFIX
-
-echo "Enter this month's password: "
-read PASSWORD
+     echo "Enter this month's prefix number 56 day cycle (4 digits): "
+       read PREFIX
+     echo "Enter this month's password: "
+       read PASSWORD
 
 wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.ScannedCharts.sqlite.zip
 wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.LO.MultiDiskImg.zip
@@ -46,47 +44,56 @@ wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFI
 
 function all_charts_update() {
     echo ""
-	echo "All Charts update - 28 and 56 day cycles "
+	echo "All Charts update (28 and 56 day cycles) "
     56_day
     28_day
 }
 
+
 function dynon_aviation_obstacles_db() {
-echo "Downloading Dynon Aviation and Obstacles Databases..."
-software_ten_path=$(curl -s https://www.dynoncertified.com/software-updates-single.php | grep -m 1 HDX1100 | sed -n 's/^.*href="\(.*.duc\)".*$/\1/p')
-software_ten_filename=$(echo $software_ten_path | sed -n 's/^.*\/\(.*.duc\)$/\1/p')
-software_ten_uri=$(echo "https://www.dynoncertified.com/$software_ten_path")
-wget -P $TMP_DIR --no-clobber $software_ten_uri
+     echo "Downloading Dynon Aviation and Obstacles Databases..."
+       software_ten_path=$(curl -s https://www.dynoncertified.com/software-updates-single.php | grep -m 1 HDX1100 | sed -n 's/^.*href="\(.*.duc\)".*$/\1/p')
+       software_ten_filename=$(echo $software_ten_path | sed -n 's/^.*\/\(.*.duc\)$/\1/p')
+       software_ten_uri=$(echo "https://www.dynoncertified.com/$software_ten_path")
+     wget -P $TMP_DIR --no-clobber $software_ten_uri
 }
 
+
 function skyview_software_update() {
-echo "Downloading latest Skyview software updates..."
-software_ten_path=$(curl -s https://www.dynoncertified.com/software-updates-single.php | grep -m 1 HDX1100 | sed -n 's/^.*href="\(.*.duc\)".*$/\1/p')
-software_ten_filename=$(echo $software_ten_path | sed -n 's/^.*\/\(.*.duc\)$/\1/p')
-software_ten_uri=$(echo "https://www.dynoncertified.com/$software_ten_path")
-wget -P $TMP_DIR --no-clobber $software_ten_uri
+     echo "Downloading latest Skyview software updates..."
+       software_ten_path=$(curl -s https://www.dynoncertified.com/software-updates-single.php | grep -m 1 HDX1100 | sed -n 's/^.*href="\(.*.duc\)".*$/\1/p')
+       software_ten_filename=$(echo $software_ten_path | sed -n 's/^.*\/\(.*.duc\)$/\1/p')
+       software_ten_uri=$(echo "https://www.dynoncertified.com/$software_ten_path")
+     wget -P $TMP_DIR --no-clobber $software_ten_uri
 }
+
 
 function all_above() {
     echo ""
 	echo "Backup, update sectional, IFR charts, Dynon Software "
     backup_usb_drive
-    sectional_update
     all_charts_update
     dynon_aviation_obstacles_db
     skyview_software_update
 }
 
-##
-# Color  Variables
-##
+
+
+
+
+
+#################
+## MENU CONFIG ## 
+#################
+
+## Color  Variables ##
+
 green='\x1B[32m'
 blue='\x1B[34m'
 clear='\x1B[0m'
 bold=$(tput bold)
-##
-# Color Functions
-##
+
+## Color Functions ##
 
 ColorGreen(){
 	echo $green$1$clear
@@ -99,7 +106,16 @@ BoldTitle (){
 }
 menu(){
 echo "
-$(BoldTitle 'Dynon Skyview') 
+$(BoldTitle '                                                                      
+88888888ba,  8b        d8  888b      88    ,ad8888ba,    888b      88  
+88      `"8b  Y8,    ,8P   8888b     88   d8"'    `"8b   8888b     88  
+88        `8b  Y8,  ,8P    88 `8b    88  d8'        `8b  88 `8b    88  
+88         88   "8aa8"     88  `8b   88  88          88  88  `8b   88  
+88         88    `88'      88   `8b  88  88          88  88   `8b  88  
+88         8P     88       88    `8b 88  Y8,        ,8P  88    `8b 88  
+88      .a8P      88       88     `8888   Y8a.    .a8P   88     `8888  
+88888888Y"'       88       88      `888    `"Y8888Y"'    88      `888  
+') 
 $(ColorGreen '1)') Backup USB Drive
 $(ColorGreen '2)') IFR Plates, Airport & Fligh Guide Diag, SA Airport Geo (28 day)
 $(ColorGreen '3)') VFR Sec, IFR Low/High Charts, Scanned Charts DB (56 day)
@@ -123,5 +139,5 @@ $(ColorBlue 'Choose an option:') "
         esac
 }
 
-# Call the menu function
+## Call the menu function ##
 menu
