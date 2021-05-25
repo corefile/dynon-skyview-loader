@@ -24,10 +24,12 @@ twentyeight_day() {
        read PREFIX
      echo "Enter this month's password: "
        read PASSWORD
-wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.Plates1024.PNG.zip
-wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.Plates.GEO.zip
-wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.FG1024.PNG.zip
-wget -P $TMP_DIR --no-clobber http://data.seattleavionics.com/OEM/Generic/$PREFIX/$PREFIX.FG.GEO.zip
+cd $TMP_DIR
+curl -LOg http://data.seattleavionics.com/OEM/Generic/"$PREFIX"/"$PREFIX".Plates1024.PNG.zip
+curl -LOg http://data.seattleavionics.com/OEM/Generic/"$PREFIX"/"$PREFIX".Plates.GEO.zip
+curl -LOg http://data.seattleavionics.com/OEM/Generic/"$PREFIX"/"$PREFIX".FG1024.PNG.zip
+curl -LOg http://data.seattleavionics.com/OEM/Generic/"$PREFIX"/"$PREFIX".FG.GEO.zip
+cd -
 }
 
 
