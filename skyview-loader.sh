@@ -63,9 +63,10 @@ cd -
 
 all_charts_update() {
     echo ""
-  echo "All Charts update (28 and 56 day cycles) "
+  echo "All Charts update (28 and 56 day cycles), and Dynon aviation and Obstacles "
     twentyeight_day
     fiftysix_day
+    dynon_aviation_obstacles_db
 }
 
 
